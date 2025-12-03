@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using IA_V2.Core.ML;
+using IA_V2.Core.ML.Data;
 
 namespace IA_V2.Api.Controllers
 {
@@ -21,12 +22,12 @@ namespace IA_V2.Api.Controllers
         private readonly IValidationService _validationService;
         private readonly ModeloIAService _modeloIAService;
 
-        public PredictionController(IPredictionService predictionService, IMapper mapper, IValidationService validationService)
+        public PredictionController(IPredictionService predictionService, IMapper mapper, IValidationService validationService, ModeloIAService modeloIAService)
         {
             _predictionService = predictionService;
             _mapper = mapper;
             _validationService = validationService;
-            _modeloIAService = new ModeloIAService();
+            _modeloIAService = modeloIAService;
         }
 
         [HttpGet]

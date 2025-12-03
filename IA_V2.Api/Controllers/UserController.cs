@@ -17,12 +17,14 @@ namespace IA_V2.Api.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly IValidationService _validationService;
+        private readonly IPasswordService _passwordService;
 
-        public UserController(IUserService userService, IMapper mapper, IValidationService validationService)
+        public UserController(IUserService userService, IMapper mapper, IValidationService validationService, IPasswordService passwordService)
         {
             _userService = userService;
             _mapper = mapper;
             _validationService = validationService;
+            _passwordService = passwordService;
         }
 
         [HttpGet]
@@ -70,7 +72,7 @@ namespace IA_V2.Api.Controllers
                 if (!validation.IsValid)
                     return BadRequest(new { errores = validation.Errors });
                 var user = _mapper.Map<User>(dto);
-                user.Password = "default";
+                user.PasswordHash = _passwordService.Hash(dto.Password);
                 await _userService.InsertUserAsync(user);
 
                 var response = _mapper.Map<UserDTO>(user);

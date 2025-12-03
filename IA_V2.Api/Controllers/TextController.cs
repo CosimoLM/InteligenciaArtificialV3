@@ -27,7 +27,10 @@ namespace IA_V2.Api.Controllers
             _mapper = mapper;
             _validationService = validationService;
         }
-
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApiResponse<IEnumerable<TextDTO>>))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] TextQueryFilter filters)
         {

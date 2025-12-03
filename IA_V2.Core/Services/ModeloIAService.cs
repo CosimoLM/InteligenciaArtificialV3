@@ -36,6 +36,10 @@ namespace IA_V2.Core.Services
             CargarModelo();
         }
 
+        public ModeloIAService()
+        {
+        }
+
         private void CargarModelo()
         {
             try

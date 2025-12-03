@@ -17,6 +17,7 @@ namespace IA_V2.Infrastructure.Repositories
         private readonly InteligenciaArtificialV2Context _context;
         private IDbContextTransaction _transaction;
         private readonly IDapperContext _dapper;
+        public readonly ISecurityRepository _securityRepository;
 
         public UnitOfWork(InteligenciaArtificialV2Context context, IDapperContext dapper)
         {
@@ -27,6 +28,7 @@ namespace IA_V2.Infrastructure.Repositories
         public IUserRepository UserRepository => new UserRepository(_context,_dapper);
         public ITextRepository TextRepository => new TextRepository(_context,_dapper);
         public IBaseRepository<Prediction> PredictionRepository => new BaseRepository<Prediction>(_context);
+        public ISecurityRepository SecurityRepository =>_securityRepository ?? new SecurityRepository(_context, _dapper);
 
         public void SaveChanges()
         {

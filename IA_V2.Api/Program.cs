@@ -1,11 +1,16 @@
 using FluentValidation;
+using IA_V2.Core.CustomEntities;
 using IA_V2.Core.Interfaces;
 using IA_V2.Core.Services;
 using IA_V2.Infrastructure.Data;
 using IA_V2.Infrastructure.Filters;
 using IA_V2.Infrastructure.Repositories;
 using IA_V2.Infrastructure.Validators;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 public class Program
 {
@@ -37,6 +42,8 @@ public class Program
         builder.Services.AddScoped<ITextService, TextService>();
         builder.Services.AddScoped<IPredictionService, PredictionService>();
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        builder.Services.AddScoped<ISecurityServices, SecurityServices>();
+        builder.Services.AddSingleton<IPasswordService, PasswordService>();
         #endregion
 
         //Validaciones
@@ -46,7 +53,7 @@ public class Program
         builder.Services.AddValidatorsFromAssemblyContaining<PredictionDTOValidator>();
 
         //ML
-        builder.Services.AddSingleton<ModeloIAService>();
+        builder.Services.AddScoped<ModeloIAService>();
         // Add services to the container.
 
         builder.Services.AddControllers(options =>
@@ -76,6 +83,48 @@ public class Program
             options.EnableAnnotations();
         });
 
+        builder.Services.AddApiVersioning(options =>
+        {
+            options.ReportApiVersions = true;
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.DefaultApiVersion = new ApiVersion(1, 0);
+            options.ApiVersionReader = ApiVersionReader.Combine(
+                new UrlSegmentApiVersionReader(),
+                new HeaderApiVersionReader("x-api-version"),
+                new QueryStringApiVersionReader("api-version")
+            );
+        });
+            
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme =
+                JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme =
+                JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters =
+            new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = builder.Configuration["Authentication:Issuer"],
+                ValidAudience = builder.Configuration["Authentication:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    System.Text.Encoding.UTF8.GetBytes(
+                        builder.Configuration["Authentication:SecretKey"]
+                    )
+                )
+            };
+        });
+
+        builder.Services.Configure<PasswordOptions>(
+            builder.Configuration.GetSection("PasswordOptions"));
+
+
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -89,7 +138,8 @@ public class Program
             });
         }
         app.UseHttpsRedirection();
-    
+
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
