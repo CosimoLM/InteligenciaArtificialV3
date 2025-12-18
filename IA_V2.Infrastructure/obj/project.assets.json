@@ -119,6 +119,30 @@
           }
         }
       },
+      "LightGBM/3.3.5": {
+        "type": "package",
+        "build": {
+          "build/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/lib_lightgbm.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/osx-x64/native/lib_lightgbm.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/win-x64/native/lib_lightgbm.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/lightgbm.exe": {
+            "assetType": "native",
+            "rid": "win-x64"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authentication.Abstractions/2.3.0": {
         "type": "package",
         "dependencies": {
@@ -1156,6 +1180,26 @@
           "buildTransitive/net8.0/Microsoft.Extensions.Logging.Abstractions.targets": {}
         }
       },
+      "Microsoft.Extensions.ML/4.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.1",
+          "Microsoft.Extensions.Logging": "8.0.0",
+          "Microsoft.Extensions.ObjectPool": "8.0.7",
+          "Microsoft.Extensions.Options": "8.0.2",
+          "Microsoft.ML": "4.0.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/Microsoft.Extensions.ML.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.ML.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.Extensions.ObjectPool/8.0.11": {
         "type": "package",
         "compile": {
@@ -1515,6 +1559,61 @@
         },
         "runtime": {
           "lib/netstandard2.0/Microsoft.ML.DataView.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Microsoft.ML.FastTree/3.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.ML": "3.0.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/Microsoft.ML.FastTree.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.ML.FastTree.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/netstandard2.0/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/libFastTreeNative.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/osx-x64/native/libFastTreeNative.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/win-x64/native/FastTreeNative.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x86/native/FastTreeNative.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
+        }
+      },
+      "Microsoft.ML.LightGbm/3.0.1": {
+        "type": "package",
+        "dependencies": {
+          "LightGBM": "3.3.5",
+          "Microsoft.ML": "3.0.1",
+          "Microsoft.ML.FastTree": "3.0.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/Microsoft.ML.LightGbm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.ML.LightGbm.dll": {
             "related": ".xml"
           }
         }
@@ -2327,7 +2426,7 @@
           }
         }
       },
-      "IA_V2.Core/1.0.0": {
+      "IA_V3.Core/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
@@ -2336,14 +2435,16 @@
           "FluentValidation.DependencyInjectionExtensions": "12.0.0",
           "Microsoft.EntityFrameworkCore": "9.0.10",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.10",
+          "Microsoft.Extensions.ML": "4.0.2",
           "Microsoft.ML": "4.0.2",
+          "Microsoft.ML.LightGbm": "3.0.1",
           "Swashbuckle.AspNetCore.Annotations": "9.0.6"
         },
         "compile": {
-          "bin/placeholder/IA_V2.Core.dll": {}
+          "bin/placeholder/IA_V3.Core.dll": {}
         },
         "runtime": {
-          "bin/placeholder/IA_V2.Core.dll": {}
+          "bin/placeholder/IA_V3.Core.dll": {}
         }
       }
     }
@@ -2467,6 +2568,23 @@
         "lib/netstandard2.0/Humanizer.dll",
         "lib/netstandard2.0/Humanizer.xml",
         "logo.png"
+      ]
+    },
+    "LightGBM/3.3.5": {
+      "sha512": "6LwKO13R9q8zZHbYNeHhayUj3/sN410L6B9QZfV/tyzuoaddur1Uy0yV0gK4FfLl3FVC0LxnfiCOrHva0xX3yQ==",
+      "type": "package",
+      "path": "lightgbm/3.3.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/LightGBM.props",
+        "build/LightGBM.targets",
+        "lightgbm.3.3.5.nupkg.sha512",
+        "lightgbm.nuspec",
+        "runtimes/linux-x64/native/lib_lightgbm.so",
+        "runtimes/osx-x64/native/lib_lightgbm.dylib",
+        "runtimes/win-x64/native/lib_lightgbm.dll",
+        "runtimes/win-x64/native/lightgbm.exe"
       ]
     },
     "Microsoft.AspNetCore.Authentication.Abstractions/2.3.0": {
@@ -4283,6 +4401,22 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Microsoft.Extensions.ML/4.0.2": {
+      "sha512": "hpLoPsx64n9v2aAdvgzM9/rG7zuHw/1h0CWY5O+9l8/xGGX3tbxMvjCx2NYlkmUGiTuXfGDiMFFKTAyVdzY9PA==",
+      "type": "package",
+      "path": "microsoft.extensions.ml/4.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netstandard2.0/Microsoft.Extensions.ML.dll",
+        "lib/netstandard2.0/Microsoft.Extensions.ML.xml",
+        "microsoft.extensions.ml.4.0.2.nupkg.sha512",
+        "microsoft.extensions.ml.nuspec",
+        "mlnetlogo.png"
+      ]
+    },
     "Microsoft.Extensions.ObjectPool/8.0.11": {
       "sha512": "6ApKcHNJigXBfZa6XlDQ8feJpq7SG1ogZXg6M4FiNzgd6irs3LUAzo0Pfn4F2ZI9liGnH1XIBR/OtSbZmJAV5w==",
       "type": "package",
@@ -4638,6 +4772,43 @@
         "lib/netstandard2.0/Microsoft.ML.DataView.xml",
         "microsoft.ml.dataview.4.0.2.nupkg.sha512",
         "microsoft.ml.dataview.nuspec",
+        "mlnetlogo.png"
+      ]
+    },
+    "Microsoft.ML.FastTree/3.0.1": {
+      "sha512": "/prGDy12z/jX8/lAfGpj0ukllAtqgR81FJDpjiZwS435xVC/og8RO7rRcXt5suy2B4grlkN7C+eo4Xfh3sQr6A==",
+      "type": "package",
+      "path": "microsoft.ml.fasttree/3.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "THIRD-PARTY-NOTICES.TXT",
+        "build/netstandard2.0/Microsoft.ML.FastTree.props",
+        "lib/netstandard2.0/Microsoft.ML.FastTree.dll",
+        "lib/netstandard2.0/Microsoft.ML.FastTree.xml",
+        "microsoft.ml.fasttree.3.0.1.nupkg.sha512",
+        "microsoft.ml.fasttree.nuspec",
+        "mlnetlogo.png",
+        "runtimes/linux-x64/native/libFastTreeNative.so",
+        "runtimes/osx-x64/native/libFastTreeNative.dylib",
+        "runtimes/win-x64/native/FastTreeNative.dll",
+        "runtimes/win-x86/native/FastTreeNative.dll"
+      ]
+    },
+    "Microsoft.ML.LightGbm/3.0.1": {
+      "sha512": "SCAiuo4FKNBoEijw+UZFdCQrTvHQ0v4W96hxxt9WHZOFIzfpVsKe6XiMPfwd665ZHhIygxMyCxH9ZFgj76Rehw==",
+      "type": "package",
+      "path": "microsoft.ml.lightgbm/3.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netstandard2.0/Microsoft.ML.LightGbm.dll",
+        "lib/netstandard2.0/Microsoft.ML.LightGbm.xml",
+        "microsoft.ml.lightgbm.3.0.1.nupkg.sha512",
+        "microsoft.ml.lightgbm.nuspec",
         "mlnetlogo.png"
       ]
     },
@@ -6144,10 +6315,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "IA_V2.Core/1.0.0": {
+    "IA_V3.Core/1.0.0": {
       "type": "project",
-      "path": "../IA_V2.Core/IA_V2.Core.csproj",
-      "msbuildProject": "../IA_V2.Core/IA_V2.Core.csproj"
+      "path": "../IA_V2.Core/IA_V3.Core.csproj",
+      "msbuildProject": "../IA_V2.Core/IA_V3.Core.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -6156,7 +6327,7 @@
       "Dapper >= 2.1.66",
       "FluentValidation >= 12.1.0",
       "FluentValidation.DependencyInjectionExtensions >= 12.1.0",
-      "IA_V2.Core >= 1.0.0",
+      "IA_V3.Core >= 1.0.0",
       "Microsoft.AspNetCore.Mvc.Abstractions >= 2.3.0",
       "Microsoft.AspNetCore.Mvc.Core >= 2.3.0",
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.10",
@@ -6170,11 +6341,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\liloc\\OneDrive\\Documents\\Universidad\\11. Semestre 2-2025\\Tecnologías Web I\\InteligenciaArtificialV2\\IA_V2.Infrastructure\\IA_V2.Infrastructure.csproj",
-      "projectName": "IA_V2.Infrastructure",
-      "projectPath": "C:\\Users\\liloc\\OneDrive\\Documents\\Universidad\\11. Semestre 2-2025\\Tecnologías Web I\\InteligenciaArtificialV2\\IA_V2.Infrastructure\\IA_V2.Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\liloc\\OneDrive\\Documents\\Universidad\\11. Semestre 2-2025\\Tecnologías Web I\\InteligenciaArtificialV3\\IA_V2.Infrastructure\\IA_V3.Infrastructure.csproj",
+      "projectName": "IA_V3.Infrastructure",
+      "projectPath": "C:\\Users\\liloc\\OneDrive\\Documents\\Universidad\\11. Semestre 2-2025\\Tecnologías Web I\\InteligenciaArtificialV3\\IA_V2.Infrastructure\\IA_V3.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\liloc\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\liloc\\OneDrive\\Documents\\Universidad\\11. Semestre 2-2025\\Tecnologías Web I\\InteligenciaArtificialV2\\IA_V2.Infrastructure\\obj\\",
+      "outputPath": "C:\\Users\\liloc\\OneDrive\\Documents\\Universidad\\11. Semestre 2-2025\\Tecnologías Web I\\InteligenciaArtificialV3\\IA_V2.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -6196,8 +6367,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\liloc\\OneDrive\\Documents\\Universidad\\11. Semestre 2-2025\\Tecnologías Web I\\InteligenciaArtificialV2\\IA_V2.Core\\IA_V2.Core.csproj": {
-              "projectPath": "C:\\Users\\liloc\\OneDrive\\Documents\\Universidad\\11. Semestre 2-2025\\Tecnologías Web I\\InteligenciaArtificialV2\\IA_V2.Core\\IA_V2.Core.csproj"
+            "C:\\Users\\liloc\\OneDrive\\Documents\\Universidad\\11. Semestre 2-2025\\Tecnologías Web I\\InteligenciaArtificialV3\\IA_V2.Core\\IA_V3.Core.csproj": {
+              "projectPath": "C:\\Users\\liloc\\OneDrive\\Documents\\Universidad\\11. Semestre 2-2025\\Tecnologías Web I\\InteligenciaArtificialV3\\IA_V2.Core\\IA_V3.Core.csproj"
             }
           }
         }

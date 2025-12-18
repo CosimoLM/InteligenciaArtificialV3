@@ -15,8 +15,8 @@ namespace IA_V2.Core.Entities
         public int? UserId { get; set; }
         public User? User { get; set; }
 
-        public string? Result { get; set; } // e.g., "Medicina", "Tecnología"
-        public double Probability { get; set; } // 0.0 - 1.0
+        public string? Result { get; set; }
+        public double Confidence { get; set; }
         public DateTime Date { get; set; } = DateTime.UtcNow;
     }
 }

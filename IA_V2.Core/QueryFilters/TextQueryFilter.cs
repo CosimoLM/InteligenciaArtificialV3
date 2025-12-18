@@ -19,7 +19,7 @@ namespace IA_V2.Core.QueryFilters
         /// Buscar en contenido
         /// </summary>
         [SwaggerSchema("Texto a buscar en el contenido")]
-        public string SearchText { get; set; }
+        public string? SearchText { get; set; }
 
         /// <summary>
         /// Filtrar por fecha desde

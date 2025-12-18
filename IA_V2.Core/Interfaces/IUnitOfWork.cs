@@ -13,7 +13,7 @@ namespace IA_V2.Core.Interfaces
     {
         IUserRepository UserRepository { get; }
         ITextRepository TextRepository { get; }
-        IBaseRepository<Prediction> PredictionRepository { get; }
+        IPredictionRepository PredictionRepository { get; }
         ISecurityRepository SecurityRepository { get; }
 
         void SaveChanges();

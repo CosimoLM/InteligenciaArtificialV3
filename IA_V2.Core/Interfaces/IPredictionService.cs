@@ -10,8 +10,9 @@ namespace IA_V2.Core.Interfaces
     public interface IPredictionService
     {
         Task<IEnumerable<Prediction>> GetAllPredictionAsync();
+        //Task<IEnumerable<Prediction>> GetAllPredictionsDapperAsync(int limit = 10);
         Task<Prediction> GetPredictionByIdAsync(int id);
-
+        //Task<Prediction> GetPredictionDapperAsync(int id);
         Task UpdatePredictionAsync(Prediction prediction);
         Task DeletePredictionAsync(int id);
     }

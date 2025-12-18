@@ -15,7 +15,7 @@ namespace IA_V2.Infrastructure.Mappings
         {
             CreateMap<User, UserDTO>().ReverseMap();
             CreateMap<Text, TextDTO>().ReverseMap();
-            CreateMap<Prediction, TextDTO>().ReverseMap();
+            CreateMap<Prediction, PredictionDTO>().ReverseMap();
             CreateMap<Security, SecurityDTO>().ReverseMap();
         }
     }

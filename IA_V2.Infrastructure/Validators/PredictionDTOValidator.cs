@@ -16,7 +16,7 @@ namespace IA_V2.Infrastructure.Validators
             RuleFor(p => p.Result)
                 .NotEmpty().WithMessage("El resultado de la predicción es obligatorio.");
 
-            RuleFor(p => p.Precision)
+            RuleFor(p => p.Confidence)
                 .InclusiveBetween(0, 1).WithMessage("La precisión debe estar entre 0 y 1.");
 
             RuleFor(p => p.TextId)

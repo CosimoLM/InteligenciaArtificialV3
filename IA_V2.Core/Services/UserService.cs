@@ -25,10 +25,17 @@ namespace IA_V2.Core.Services
             return await _unitOfWork.UserRepository.GetAll();
         }
 
-        public async Task<IEnumerable<User>> GetAllUsersDapperAsync(int limit = 10)
+        public async Task<IEnumerable<User>> GetAllUsersDapperAsync(int limit = 1000)
         {
-            var sql = "SELECT * FROM Users ORDER BY Id DESC LIMIT @Limit";
-            return await _dapper.QueryAsync<User>(sql, new { Limit = limit });
+            try
+            {
+                if (limit <= 0) limit = 1000;
+                return await _unitOfWork.UserRepository.GetAllUsersDapperAsync(limit);
+            }
+            catch (Exception err)
+            {
+                return await _unitOfWork.UserRepository.GetAll();
+            }
         }
 
         public async Task<User> GetUserAsync(int id)
@@ -38,22 +45,31 @@ namespace IA_V2.Core.Services
 
         public async Task<User> GetUserDapperAsync(int id)
         {
-            var sql = "SELECT * FROM Users WHERE Id = @Id";
-            return await _dapper.QueryFirstOrDefaultAsync<User>(sql, new { Id = id });
+            return await _unitOfWork.UserRepository.GetUserByIdDapperAsync(id);
         }
+
         public async Task InsertUserAsync(User user)
         {
-            // Validar email único
-            var existingUser = await _unitOfWork.UserRepository.GetAll();
-            foreach (var u in existingUser)
+            try
             {
-                if (u.Email.Equals(user.Email, StringComparison.OrdinalIgnoreCase))
-                    throw new BusinessException("El email ya está registrado");
-            }
+                var existingUser = await _unitOfWork.UserRepository.GetUserByEmailAsync(user.Email);
+                if (existingUser != null)
+                    throw new BusinessException($"El email '{user.Email}' ya está registrado");
+                if (string.IsNullOrWhiteSpace(user.Name))
+                    throw new BusinessException("El nombre es requerido");
 
-            await _unitOfWork.UserRepository.Add(user);
-            await _unitOfWork.SaveChangesAsync();
+                if (string.IsNullOrWhiteSpace(user.Email))
+                    throw new BusinessException("El email es requerido");
+
+                await _unitOfWork.UserRepository.Add(user);
+                await _unitOfWork.SaveChangesAsync(); 
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al insertar usuario: {ex.Message}", ex);
+            }
         }
+        
 
         public async Task UpdateUserAsync(User user)
         {

@@ -1,6 +1,8 @@
-﻿using IA_V2.Core.Entities;
+﻿using Dapper;
+using IA_V2.Core.Entities;
 using IA_V2.Core.Enum;
 using IA_V2.Core.Interfaces;
+using IA_V2.Core.QueryFilters;
 using IA_V2.Infrastructure.Data;
 using IA_V2.Infrastructure.Queries;
 using Microsoft.EntityFrameworkCore;
@@ -24,29 +26,17 @@ namespace IA_V2.Infrastructure.Repositories
         }
 
 
-        public async Task<IEnumerable<User>> GetAllUsersDapperAsync(int limit = 10)
+        public async Task<User> GetUserByEmailAsync(string email)
         {
             try
             {
-                var sql = _dapper.Provider switch
-                {
-                    DatabaseProvider.SqlServer => UserQueries.UserQuerySqlServer,
-                    _ => throw new NotSupportedException("Provider no soportado")
-                };
-
-                return await _dapper.QueryAsync<User>(sql, new { Limit = limit });
+                var sql = @"SELECT * FROM Users WHERE Email = @Email";
+                return await _dapper.QueryFirstOrDefaultAsync<User>(sql, new { Email = email });
             }
             catch (Exception err)
             {
-                throw new Exception($"Error al obtener usuarios con Dapper: {err.Message}", err);
+                throw new Exception($"Error al obtener usuario por email con Dapper: {err.Message}", err);
             }
-        }
-
-        public async Task<User> GetUserByEmailAsync(string email)
-        {
-            return await _dapper.QueryFirstOrDefaultAsync<User>(
-                UserQueries.GetUserByEmail,
-                new { Email = email });
         }
 
         public async Task<IEnumerable<User>> GetUsersWithTextsAsync()
@@ -67,9 +57,36 @@ namespace IA_V2.Infrastructure.Repositories
             return await _dapper.ExecuteScalarAsync<int>(UserQueries.GetUsersCount);
         }
 
-        public Task<IEnumerable<User>> GetAllUserByUserAsync(int idUser)
+
+        public async Task<IEnumerable<User>> GetAllUsersDapperAsync(int limit = 10)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var sql = _dapper.Provider switch
+                {
+                    DatabaseProvider.SqlServer => UserQueries.UserQuerySqlServer,
+                    _ => throw new NotSupportedException("Provider no soportado")
+                };
+
+                return await _dapper.QueryAsync<User>(sql, new { Limit = limit });
+            }
+            catch (Exception err)
+            {
+                throw new Exception($"Error al obtener usuarios con Dapper: {err.Message}", err);
+            }
+        }
+
+        public async Task<User> GetUserByIdDapperAsync(int id)
+        {
+            try
+            {
+                var sql = @"SELECT * FROM Users WHERE Id = @Id";
+                return await _dapper.QueryFirstOrDefaultAsync<User>(sql, new { Id = id });
+            }
+            catch (Exception err)
+            {
+                throw new Exception($"Error al obtener usuario por ID con Dapper: {err.Message}", err);
+            }
         }
     }
 }

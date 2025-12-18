@@ -13,13 +13,13 @@ namespace IA_V2.Core.QueryFilters
         /// Buscar por nombre
         /// </summary>
         [SwaggerSchema("Texto a buscar en el nombre")]
-        public string SearchName { get; set; }
+        public string ?SearchName { get; set; }
 
         /// <summary>
         /// Buscar por email
         /// </summary>
         [SwaggerSchema("Texto a buscar en el email")]
-        public string SearchEmail { get; set; }
+        public string ?SearchEmail  { get; set; }
 
         /// <summary>
         /// Filtrar usuarios con textos

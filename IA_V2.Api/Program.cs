@@ -6,10 +6,13 @@ using IA_V2.Infrastructure.Data;
 using IA_V2.Infrastructure.Filters;
 using IA_V2.Infrastructure.Repositories;
 using IA_V2.Infrastructure.Validators;
+using IA_V3.Core.Interfaces;
+using IA_V3_Core;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.ML;
 using Microsoft.IdentityModel.Tokens;
 
 public class Program
@@ -44,6 +47,15 @@ public class Program
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped<ISecurityServices, SecurityServices>();
         builder.Services.AddSingleton<IPasswordService, PasswordService>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<ITextRepository, TextRepository>();
+        builder.Services.AddScoped<IPredictionRepository, PredictionRepository>();
+
+
+        //Modelo Inteligencia Artificial
+        builder.Services.AddPredictionEnginePool<MLModel1.ModelInput, MLModel1.ModelOutput>()
+        .FromFile("MLModel1.mlnet");
+        builder.Services.AddScoped<IModeloIAService,ModeloIAService>();
         #endregion
 
         //Validaciones
@@ -137,6 +149,8 @@ public class Program
                 options.RoutePrefix = string.Empty;
             });
         }
+
+        
         app.UseHttpsRedirection();
 
         app.UseAuthentication();
@@ -145,5 +159,6 @@ public class Program
         app.MapControllers();
 
         app.Run();
+
     }
 }

@@ -12,11 +12,33 @@ namespace IA_V2.Infrastructure.Repositories
 {
     public class SecurityRepository : BaseRepository<Security>, ISecurityRepository
     {
-        public SecurityRepository(InteligenciaArtificialV2Context context, IDapperContext dapper) : base(context) { }
+        private readonly IDapperContext _dapper;
+        public SecurityRepository(InteligenciaArtificialV2Context context, IDapperContext dapper) : base(context) 
+        {
+            _dapper = dapper;
+        }
 
         public async Task<Security> GetLoginByCredentials(UserLogin login)
         {
-            return await _entities.FirstOrDefaultAsync(x => x.Login == login.User);
+            try
+            {
+                var sql = @"SELECT * FROM Securities WHERE Login = @Login";
+
+                var security = await _dapper.QueryFirstOrDefaultAsync<Security>(
+                    sql,
+                    new { Login = login.User });
+
+                if (security == null)
+                {
+                    throw new Exception($"Usuario '{login.User}' no encontrado");
+                }
+
+                return security;
+            }
+            catch (Exception err)
+            {
+                throw new Exception($"Error al obtener credenciales con Dapper: {err.Message}", err);
+            }
         }
     }
 }

@@ -27,7 +27,7 @@ namespace IA_V2.Infrastructure.Repositories
 
         public IUserRepository UserRepository => new UserRepository(_context,_dapper);
         public ITextRepository TextRepository => new TextRepository(_context,_dapper);
-        public IBaseRepository<Prediction> PredictionRepository => new BaseRepository<Prediction>(_context);
+        public IPredictionRepository PredictionRepository => new PredictionRepository(_context,_dapper);
         public ISecurityRepository SecurityRepository =>_securityRepository ?? new SecurityRepository(_context, _dapper);
 
         public void SaveChanges()

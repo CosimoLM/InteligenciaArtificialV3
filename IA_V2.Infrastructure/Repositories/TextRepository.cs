@@ -1,13 +1,15 @@
-﻿using IA_V2.Core.Interfaces;
-using IA_V2.Infrastructure.Data;
+﻿using Dapper;
 using IA_V2.Core.Entities;
+using IA_V2.Core.Enum;
+using IA_V2.Core.Interfaces;
+using IA_V2.Core.QueryFilters;
+using IA_V2.Infrastructure.Data;
+using IA_V2.Infrastructure.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IA_V2.Core.Enum;
-using IA_V2.Infrastructure.Queries;
 
 namespace IA_V2.Infrastructure.Repositories
 {
@@ -39,6 +41,21 @@ namespace IA_V2.Infrastructure.Repositories
             }
         }
 
+        public async Task<Text> GetTextByIdDapperAsync(int id)
+        {
+            try
+            {
+                var sql = @"SELECT t.*, u.Name as UserName 
+                       FROM Texts t 
+                       LEFT JOIN Users u ON t.UserId = u.Id 
+                       WHERE t.Id = @Id";
+                return await _dapper.QueryFirstOrDefaultAsync<Text>(sql, new { Id = id });
+            }
+            catch (Exception err)
+            {
+                throw new Exception($"Error al obtener texto por ID con Dapper: {err.Message}", err);
+            }
+        }
         public async Task<IEnumerable<Text>> GetTextsByUserDapperAsync(int userId)
         {
             var sql = "SELECT * FROM Texts WHERE UserId = @UserId ORDER BY FechaEnvio DESC";
@@ -56,5 +73,8 @@ namespace IA_V2.Infrastructure.Repositories
 
             return await _dapper.QueryAsync<Text>(sql);
         }
+
+       
+
     }
 }

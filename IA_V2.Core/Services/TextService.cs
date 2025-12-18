@@ -16,16 +16,19 @@ namespace IA_V2.Core.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDapperContext _dapper;
-        private readonly ModeloIAService _modeloIAService;
 
-        public TextService(IUnitOfWork unitOfWork, IDapperContext dapper, ModeloIAService modeloIAService)
+        public TextService(IUnitOfWork unitOfWork, IDapperContext dapper)
         {
             _unitOfWork = unitOfWork;
             _dapper = dapper;
-            _modeloIAService = modeloIAService;
         }
 
-        public async Task<ResponseData> GetAllTextsAsync(TextQueryFilter filters)
+        public async Task<IEnumerable<Text>> GetAllTextAsync()
+        {
+            return await _unitOfWork.TextRepository.GetAll();
+        }
+
+        public async Task<ResponseData> GetAllTextAsync(TextQueryFilter filters)
         {
             var texts = await _unitOfWork.TextRepository.GetAll();
 
@@ -86,30 +89,24 @@ namespace IA_V2.Core.Services
 
         public async Task InsertTextAsync(Text text)
         {
-            // Validar que el usuario existe
-            var user = await _unitOfWork.UserRepository.GetById(text.UserId.Value);
-            if (user == null)
-                throw new BusinessException("El usuario no existe");
-
-            // Validar contenido (mínimo de caracteres)
-            if (string.IsNullOrWhiteSpace(text.Content) || text.Content.Length < 5)
-                throw new BusinessException("El texto debe tener al menos 5 caracteres");
-
-            // Analizar con IA y guardar predicción
-            var predictionResult = _modeloIAService.Predecir(text.Content);
-
-            var prediction = new Prediction
+            try
             {
-                TextId = text.Id,
-                UserId = text.UserId,
-                Result = predictionResult.Categoria,
-                Probability = predictionResult.Confidencias?.Max() ?? 0.0,
-                Date = DateTime.UtcNow
-            };
+                // Validar que el usuario existe
+                var user = await _unitOfWork.UserRepository.GetById(text.UserId.Value);
+                if (user == null)
+                    throw new BusinessException("El usuario no existe");
 
-            await _unitOfWork.TextRepository.Add(text);
-            await _unitOfWork.PredictionRepository.Add(prediction);
-            await _unitOfWork.SaveChangesAsync();
+                // Validar contenido (mínimo de caracteres)
+                if (string.IsNullOrWhiteSpace(text.Content) || text.Content.Length < 5)
+                    throw new BusinessException("El texto debe tener al menos 5 caracteres");
+
+                await _unitOfWork.TextRepository.Add(text);
+                await _unitOfWork.SaveChangesAsync(); 
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al insertar texto: {ex.Message}", ex);
+            }
         }
 
         public async Task UpdateTextAsync(Text text)
@@ -137,11 +134,6 @@ namespace IA_V2.Core.Services
 
             await _unitOfWork.TextRepository.Delete(id);
             await _unitOfWork.SaveChangesAsync();
-        }
-
-        public Task<IEnumerable<Text>> GetAllTextAsync()
-        {
-            throw new NotImplementedException();
         }
     }
 }

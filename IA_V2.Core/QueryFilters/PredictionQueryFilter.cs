@@ -25,7 +25,7 @@ namespace IA_V2.Core.QueryFilters
         /// Filtrar por categoría de resultado
         /// </summary>
         [SwaggerSchema("Categoría de predicción")]
-        public string Result { get; set; }
+        public string? Result { get; set; }
 
         /// <summary>
         /// Probabilidad mínima

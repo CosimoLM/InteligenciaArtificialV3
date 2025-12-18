@@ -2,6 +2,7 @@
 using IA_V2.Api.Responses;
 using IA_V2.Core.CustomEntities;
 using IA_V2.Core.Entities;
+using IA_V2.Core.Exceptions;
 using IA_V2.Core.Interfaces;
 using IA_V2.Core.QueryFilters;
 using IA_V2.Infrastructure.DTOs;
@@ -36,6 +37,10 @@ namespace IA_V2.Api.Controllers
         {
             try
             {
+                if (filters.PageNumber < 1) filters.PageNumber = 1;
+                if (filters.PageSize < 1 || filters.PageSize > 100)
+                    filters.PageSize = 10;
+
                 var texts = await _textService.GetAllTextAsync();
 
                 // Aplicar filtros
@@ -55,22 +60,20 @@ namespace IA_V2.Api.Controllers
                 var pagedTexts = PagedList<Text>.Create(texts, filters.PageNumber, filters.PageSize);
                 var textsDto = _mapper.Map<IEnumerable<TextDTO>>(pagedTexts);
 
-                var pagination = new Pagination
-                {
-                    TotalCount = pagedTexts.TotalCount,
-                    PageSize = pagedTexts.PageSize,
-                    CurrentPage = pagedTexts.CurrentPage,
-                    TotalPages = pagedTexts.TotalPages,
-                    HasNextPage = pagedTexts.HasNextPage,
-                    HasPreviousPage = pagedTexts.HasPreviousPage
-                };
-
                 var response = new ApiResponse<IEnumerable<TextDTO>>(textsDto)
                 {
-                    Pagination = pagination,
+                    Pagination = new Pagination
+                    {
+                        TotalCount = pagedTexts.TotalCount,
+                        PageSize = pagedTexts.PageSize,
+                        CurrentPage = pagedTexts.CurrentPage,
+                        TotalPages = pagedTexts.TotalPages,
+                        HasNextPage = pagedTexts.HasNextPage,
+                        HasPreviousPage = pagedTexts.HasPreviousPage
+                    },
                     Messages = new Message[] { new() {
-                        Type = "Information",
-                        Description = "Textos recuperados correctamente"
+                        Type = "Success",
+                        Description = $"Se encontraron {pagedTexts.TotalCount} textos"
                     }}
                 };
 
@@ -87,24 +90,45 @@ namespace IA_V2.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApiResponse<TextDTO>))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetById(int id)
         {
             try
             {
-                var validation = await _validationService.ValidateAsync(id);
-                if (!validation.IsValid)
-                    return BadRequest(new { errores = validation.Errors });
+                
                 var text = await _textService.GetTextByIdAsync(id);
                 var textDto = _mapper.Map<TextDTO>(text);
-                var response = new ApiResponse<TextDTO>(textDto);
+                var validation = await _validationService.ValidateAsync(textDto);
+                if (!validation.IsValid)
+                    return BadRequest(new { errores = validation.Errors });
+                var response = new ApiResponse<TextDTO>(textDto)
+                {
+                    Messages = new Message[] { new() {
+                        Type = "Success",
+                        Description = "Texto recuperado correctamente"
+                    }}
+                };
                 return Ok(response);
             }
             catch (Exception err)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, err.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiResponse<object>(null)
+                    {
+                        Messages = new Message[] { new() {
+                            Type = "Error",
+                            Description = $"Error al obtener texto: {err.Message}"
+                        }}
+                    });
             }
         }
         [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(ApiResponse<TextDTO>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> Insert(TextDTO dto)
         {
             try
@@ -112,19 +136,41 @@ namespace IA_V2.Api.Controllers
                 var validation = await _validationService.ValidateAsync(dto);
                 if (!validation.IsValid)
                     return BadRequest(new { errores = validation.Errors });
+
                 var text = _mapper.Map<Text>(dto);
                 await _textService.InsertTextAsync(text);
 
                 var response = _mapper.Map<TextDTO>(text);
                 return Ok(response);
             }
+            catch (BusinessException bex)
+            {
+                return BadRequest(new ApiResponse<object>(null)
+                {
+                    Messages = new Message[] { new() {
+                        Type = "BusinessError",
+                        Description = bex.Message
+                    }}
+                });
+            }
             catch (Exception err)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, err.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiResponse<object>(null)
+                    {
+                        Messages = new Message[] { new() {
+                            Type = "Error",
+                            Description = $"Error al crear texto: {err.Message}"
+                        }}
+                    });
             }
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApiResponse<TextDTO>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> Update(int id, [FromBody] TextDTO dto)
         {
             try
@@ -151,6 +197,10 @@ namespace IA_V2.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
             try
