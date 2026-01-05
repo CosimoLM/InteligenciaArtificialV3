@@ -88,5 +88,6 @@ namespace IA_V2.Infrastructure.Repositories
                 throw new Exception($"Error al obtener usuario por ID con Dapper: {err.Message}", err);
             }
         }
+
     }
 }

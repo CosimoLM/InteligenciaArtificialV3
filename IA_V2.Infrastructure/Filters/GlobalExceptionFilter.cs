@@ -37,7 +37,7 @@ namespace IA_V2.Infrastructure.Filters
                 {
                     Status = 500,
                     Title = "Internal Server Error",
-                    Detail = "Ocurrió un error inesperado"
+                    Detail = context.Exception.Message
                 };
 
                 var json = new

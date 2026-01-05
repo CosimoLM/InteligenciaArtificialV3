@@ -93,7 +93,6 @@ namespace IA_V2.Core.Services
 
             // Validar que no tenga textos asociados
             var userTexts = await _unitOfWork.TextRepository.GetAll();
-            // Lógica de validación
 
             await _unitOfWork.UserRepository.Delete(id);
             await _unitOfWork.SaveChangesAsync();

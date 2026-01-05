@@ -12,7 +12,8 @@ namespace IA_V2.Infrastructure.Validators
     {
         public TextDTOValidator()
         {
-            
+            RuleFor(t=>t.Id)
+                .GreaterThan(0).WithMessage("Debe asociar un Id valido.");
 
             RuleFor(t => t.Content)
                 .NotEmpty().WithMessage("El contenido del texto es obligatorio.")

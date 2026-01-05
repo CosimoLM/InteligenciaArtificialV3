@@ -205,9 +205,13 @@ namespace IA_V2.Api.Controllers
         {
             try
             {
-                var validation = await _validationService.ValidateAsync(id);
+                //await _textService.GetTextByIdAsync(id);
+                var dto=new TextDTO();
+                dto.Id = id;
+                var validation = await _validationService.ValidateAsync(dto);
                 if (!validation.IsValid)
-                    return BadRequest(new { errores = validation.Errors });
+                   return BadRequest(new { errores = validation.Errors });
+
                 await _textService.DeleteTextAsync(id);
                 return Ok(new { message = $"El texto con ID {id} fue eliminado correctamente." });
             }

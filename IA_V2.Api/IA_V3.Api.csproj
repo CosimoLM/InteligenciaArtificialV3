@@ -14,6 +14,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="MLModel1.mlnet" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="MLModel1.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\IA_V2.Core\IA_V3.Core.csproj" />
     <ProjectReference Include="..\IA_V2.Infrastructure\IA_V3.Infrastructure.csproj" />
   </ItemGroup>

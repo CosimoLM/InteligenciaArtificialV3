@@ -259,13 +259,18 @@ namespace IA_V2.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var validation = await _validationService.ValidateAsync(id);
-                if (!validation.IsValid)
-                    return BadRequest(new { errores = validation.Errors });
+                //var validation = await _validationService.ValidateAsync(id);
+                //if (!validation.IsValid)
+                //    return BadRequest(new { errores = validation.Errors });
+
                 await _userService.DeleteUserAsync(id);
                 return Ok(new { message = $"El usuario con ID {id} fue eliminado correctamente." });
             }

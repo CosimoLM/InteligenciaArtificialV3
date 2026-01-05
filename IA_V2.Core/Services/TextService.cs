@@ -124,7 +124,6 @@ namespace IA_V2.Core.Services
         {
             var text = await GetTextByIdAsync(id);
 
-            // Eliminar predicciones asociadas primero
             var predictions = await _unitOfWork.PredictionRepository.GetAll();
             var textPredictions = predictions.Where(p => p.TextId == id);
             foreach (var prediction in textPredictions)

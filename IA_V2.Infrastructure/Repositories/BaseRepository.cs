@@ -41,7 +41,7 @@ namespace IA_V2.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al agregar entidad {typeof(T).Name}: {ex.Message}", ex);
+                throw new Exception($"Error al obtener entidad {typeof(T).Name}: {ex.Message}", ex);
             }
         }
 
@@ -77,7 +77,6 @@ namespace IA_V2.Infrastructure.Repositories
             {
                 T entity = await GetById(id);
                 _entities.Remove(entity);
-                //await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {

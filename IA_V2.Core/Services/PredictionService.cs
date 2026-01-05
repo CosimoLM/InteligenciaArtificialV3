@@ -41,24 +41,14 @@ namespace IA_V2.Core.Services
             }
         }
 
-        public async Task UpdatePredictionAsync(Prediction prediction)
-        {
-            try
-            {
-                await _unitOfWork.PredictionRepository.Update(prediction);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error en PredictionService.UpdatePredictionAsync: {ex.Message}", ex);
-            }
-        }
 
         public async Task DeletePredictionAsync(int id)
         {
             try
             {
                 await _unitOfWork.PredictionRepository.Delete(id);
-            }
+                await _unitOfWork.SaveChangesAsync();
+            }   
             catch (Exception ex)
             {
                 throw new Exception($"Error en PredictionService.DeletePredictionAsync: {ex.Message}", ex);

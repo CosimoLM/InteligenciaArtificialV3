@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
-using Microsoft.ML.Trainers.LightGbm;
 using Microsoft.ML.Transforms;
 
 namespace IA_V3_Core
@@ -96,7 +95,7 @@ namespace IA_V3_Core
                                     .Append(mlContext.Transforms.Text.FeaturizeText(inputColumnName:@"col3",outputColumnName:@"col3"))      
                                     .Append(mlContext.Transforms.Concatenate(@"Features", new []{@"col1",@"col0",@"col3"}))      
                                     .Append(mlContext.Transforms.Conversion.MapValueToKey(outputColumnName:@"col2",inputColumnName:@"col2",addKeyValueAnnotationsAsText:false))      
-                                    .Append(mlContext.MulticlassClassification.Trainers.LightGbm(new LightGbmMulticlassTrainer.Options(){NumberOfLeaves=447,NumberOfIterations=4,MinimumExampleCountPerLeaf=20,LearningRate=0.9999997766729865,LabelColumnName=@"col2",FeatureColumnName=@"Features",Booster=new GradientBooster.Options(){SubsampleFraction=0.5434101559999043,FeatureFraction=0.99999999,L1Regularization=2E-10,L2Regularization=0.9999997766729865},MaximumBinCountPerFeature=242}))      
+                                    .Append(mlContext.MulticlassClassification.Trainers.OneVersusAll(binaryEstimator: mlContext.BinaryClassification.Trainers.LbfgsLogisticRegression(new LbfgsLogisticRegressionBinaryTrainer.Options(){L1Regularization=1F,L2Regularization=1F,LabelColumnName=@"col2",FeatureColumnName=@"Features"}), labelColumnName:@"col2"))      
                                     .Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName:@"PredictedLabel",inputColumnName:@"PredictedLabel"));
 
             return pipeline;

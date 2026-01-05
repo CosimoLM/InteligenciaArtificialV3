@@ -47,7 +47,7 @@ namespace IA_V2.Core.Services
                     TextId = text.Id,          // ← RELACIÓN con Text
                     UserId = text.UserId,      // ← RELACIÓN con User (del Text)
                     Result = mlResult.PredictedLabel, // "Positive", "Negative", etc.
-                    Confidence = mlResult.Score?.Max() ?? 0f,
+                    Probability = mlResult.Score?.Max() ?? 0f,
                     Date = DateTime.UtcNow
                 };
 

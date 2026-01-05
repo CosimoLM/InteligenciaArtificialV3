@@ -64,8 +64,6 @@ public class Program
         builder.Services.AddValidatorsFromAssemblyContaining<TextDTOValidator>();
         builder.Services.AddValidatorsFromAssemblyContaining<PredictionDTOValidator>();
 
-        //ML
-        builder.Services.AddScoped<ModeloIAService>();
         // Add services to the container.
 
         builder.Services.AddControllers(options =>

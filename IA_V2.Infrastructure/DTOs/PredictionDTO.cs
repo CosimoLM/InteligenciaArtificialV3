@@ -10,7 +10,7 @@ namespace IA_V2.Infrastructure.DTOs
     {
         public int Id { get; set; }
         public string? Result { get; set; }
-        public double Confidence { get; set; }
+        public double Probability { get; set; }
         public DateTime Date { get; set; }
         public int TextId { get; set; }
     }
