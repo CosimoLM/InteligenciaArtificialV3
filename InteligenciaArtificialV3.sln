@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36408.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IA_V3.Api", "IA_V2.Api\IA_V3.Api.csproj", "{E56669C0-76AB-4AA8-8D53-9AF9548E7789}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IA_V2.Api", "IA_V2.Api\IA_V2.Api.csproj", "{E56669C0-76AB-4AA8-8D53-9AF9548E7789}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IA_V3.Core", "IA_V2.Core\IA_V3.Core.csproj", "{F77DB0D8-7534-4C6C-A2B6-FED249287D39}"
 EndProject

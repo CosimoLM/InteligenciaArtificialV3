@@ -15,5 +15,10 @@ namespace IA_V2.Core.Entities
         public string Name { get; set; }
 
         public RoleType? Role { get; set; }
+
+        public int? UserId { get; set; }
+        public virtual User? User { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

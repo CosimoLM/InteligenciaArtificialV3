@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
+using Microsoft.ML.Trainers.FastTree;
 using Microsoft.ML.Transforms;
 
 namespace IA_V3_Core
@@ -95,7 +96,7 @@ namespace IA_V3_Core
                                     .Append(mlContext.Transforms.Text.FeaturizeText(inputColumnName:@"col3",outputColumnName:@"col3"))      
                                     .Append(mlContext.Transforms.Concatenate(@"Features", new []{@"col1",@"col0",@"col3"}))      
                                     .Append(mlContext.Transforms.Conversion.MapValueToKey(outputColumnName:@"col2",inputColumnName:@"col2",addKeyValueAnnotationsAsText:false))      
-                                    .Append(mlContext.MulticlassClassification.Trainers.OneVersusAll(binaryEstimator: mlContext.BinaryClassification.Trainers.LbfgsLogisticRegression(new LbfgsLogisticRegressionBinaryTrainer.Options(){L1Regularization=1F,L2Regularization=1F,LabelColumnName=@"col2",FeatureColumnName=@"Features"}), labelColumnName:@"col2"))      
+                                    .Append(mlContext.MulticlassClassification.Trainers.OneVersusAll(binaryEstimator:mlContext.BinaryClassification.Trainers.FastForest(new FastForestBinaryTrainer.Options(){NumberOfTrees=4,NumberOfLeaves=4,FeatureFraction=1F,LabelColumnName=@"col2",FeatureColumnName=@"Features"}),labelColumnName:@"col2"))      
                                     .Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName:@"PredictedLabel",inputColumnName:@"PredictedLabel"));
 
             return pipeline;

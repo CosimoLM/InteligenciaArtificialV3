@@ -14,8 +14,9 @@ using System.Net;
 
 namespace IA_V2.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class TextController : ControllerBase
     {
         private readonly ITextService _textService;
@@ -133,9 +134,9 @@ namespace IA_V2.Api.Controllers
         {
             try
             {
-                var validation = await _validationService.ValidateAsync(dto);
-                if (!validation.IsValid)
-                    return BadRequest(new { errores = validation.Errors });
+                //var validation = await _validationService.ValidateAsync(dto);
+                //if (!validation.IsValid)
+                //    return BadRequest(new { errores = validation.Errors });
 
                 var text = _mapper.Map<Text>(dto);
                 await _textService.InsertTextAsync(text);

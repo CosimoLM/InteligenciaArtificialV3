@@ -15,8 +15,10 @@ using System.Net;
 
 namespace IA_V2.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize(Roles = $"{nameof(RoleType.Administrator)}")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class SecurityController : ControllerBase
     {
         private readonly ISecurityServices _securityServices;
@@ -42,13 +44,9 @@ namespace IA_V2.Api.Controllers
             {
                 var security = _mapper.Map<Security>(securityDto);
                 security.Password = _passwordService.Hash(security.Password);
-
-                // 4. Registrar
                 await _securityServices.RegisterUser(security);
 
-                // 5. Preparar respuesta (sin password)
                 securityDto = _mapper.Map<SecurityDTO>(security);
-                securityDto.Password = null; // ← No enviar password
 
                 var response = new ApiResponse<SecurityDTO>(securityDto)
                 {
@@ -58,7 +56,7 @@ namespace IA_V2.Api.Controllers
                 }}
                 };
 
-                return Ok(response);
+                return Ok(response);    
             }
             catch (BusinessException bex)
             {

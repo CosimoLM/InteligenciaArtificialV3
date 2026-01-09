@@ -10,8 +10,9 @@ using System.Text;
 
 namespace IA_V2.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class TokenController : ControllerBase
     {
         private readonly IConfiguration _configuration;
@@ -94,12 +95,10 @@ namespace IA_V2.Api.Controllers
         {
             try
             {
-                var connectionStringMySql = _configuration["ConnectionStrings:ConnectionMySql"];
                 var connectionStringSqlServer = _configuration["ConnectionStrings:ConnectionSqlServer"];
 
                 var result = new
                 {
-                    connectionStringMySql = connectionStringMySql ?? "My SQL NO CONFIGURADO",
                     connectionStringSqlServer = connectionStringSqlServer ?? "SQL SERVER NO CONFIGURADO",
                     AllConnectionStrings = _configuration.GetSection("ConnectionStrings").GetChildren().Select(x => new { Key = x.Key, Value = x.Value }),
                     Environment = _configuration["ASPNETCORE_ENVIRONMENT"] ?? "ASPNETCORE_ENVIRONMENT NO CONFIGURADO",
@@ -119,12 +118,13 @@ namespace IA_V2.Api.Controllers
         {
             var result = new
             {
-                ConnectionMySql = _configuration["ConnectionStrings:ConnectionMySql"],
                 ConnectionSqlServer = _configuration["ConnectionStrings:ConnectionSqlServer"]
             };
 
             return Ok(result);
         }
+
+
 
     }
 }

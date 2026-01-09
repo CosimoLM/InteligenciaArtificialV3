@@ -12,6 +12,9 @@ namespace IA_V2.Core.Entities
         //public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+
+        public virtual Security? Security { get; set; }
+
         public virtual ICollection<Text> Texts { get; set; } = new List<Text>();
         public virtual ICollection<Prediction> Predictions { get; set; } = new List<Prediction>();
     }

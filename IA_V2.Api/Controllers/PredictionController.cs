@@ -2,6 +2,7 @@
 using IA_V2.Api.Responses;
 using IA_V2.Core.CustomEntities;
 using IA_V2.Core.Entities;
+using IA_V2.Core.Enum;
 using IA_V2.Core.Interfaces;
 using IA_V2.Core.QueryFilters;
 using IA_V2.Core.Services;
@@ -9,14 +10,17 @@ using IA_V2.Infrastructure.Data;
 using IA_V2.Infrastructure.DTOs;
 using IA_V2.Infrastructure.Validators;
 using IA_V3.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace IA_V2.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize(Roles = $"{nameof(RoleType.Administrator)},{nameof(RoleType.User)}")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class PredictionController : ControllerBase
     {
         private readonly IPredictionService _predictionService;

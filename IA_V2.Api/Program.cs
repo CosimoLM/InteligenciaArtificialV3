@@ -22,13 +22,21 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Configuration.Sources.Clear();
+        builder.Configuration
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables(); // ¡ESTO ES CLAVE PARA AZURE
+
         // Configurar User Secrets solo en Desarrollo
         if (builder.Environment.IsDevelopment())
         {
             builder.Configuration.AddUserSecrets<Program>();
         }
+
         #region Configurar la BD SqlServer
         var connectionString = builder.Configuration.GetConnectionString("ConnectionSqlServer");
+
         builder.Services.AddDbContext<InteligenciaArtificialV2Context>(options => options.UseSqlServer(connectionString));
         #endregion
 
@@ -78,10 +86,10 @@ public class Program
             {
                 Title = "Backend IA Text Analysis API",
                 Version = "v2",
-                Description = "API para análisis de textos usando IA",
+                Description = "Documentacion de la API para análisis de textos usando IA - NET 9.0",
                 Contact = new()
                 {
-                    Name = "Equipo de Desarrollo",
+                    Name = "Equipo de Desarrollo UCB",
                     Email = "liam.lopez@ucb.edu.bo"
                 }
             });
@@ -143,8 +151,8 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v2/swagger.json", "Backend IA Text Analysis API v2");
-                options.RoutePrefix = string.Empty;
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend IA Text Analysis API v3");
+                options.RoutePrefix = "swagger";
             });
         }
 

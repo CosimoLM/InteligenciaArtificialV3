@@ -2,20 +2,24 @@
 using IA_V2.Api.Responses;
 using IA_V2.Core.CustomEntities;
 using IA_V2.Core.Entities;
+using IA_V2.Core.Enum;
 using IA_V2.Core.Exceptions;
 using IA_V2.Core.Interfaces;
 using IA_V2.Core.QueryFilters;
 using IA_V2.Infrastructure.DTOs;
 using IA_V2.Infrastructure.Repositories;
 using IA_V2.Infrastructure.Validators;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace IA_V2.Api.Controllers
+namespace IA_V2.Api.Controllers.v1
 {
-    [Route("api/[controller]")]
+    [Authorize(Roles = $"{nameof(RoleType.Administrator)},{nameof(RoleType.User)}")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;

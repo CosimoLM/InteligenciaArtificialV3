@@ -17,6 +17,7 @@ namespace IA_V2.Infrastructure.Data
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<Text> Texts { get; set; } = null!;
         public virtual DbSet<Prediction> Predictions { get; set; } = null!;
+        public virtual DbSet<Security> Securities { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
